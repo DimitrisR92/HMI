@@ -7,7 +7,6 @@ import com.pdfjet.PDF;
 import com.pdfjet.Page;
 import com.pdfjet.TextBox;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -56,7 +55,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import javax.swing.undo.UndoManager;
 
 public class HmiFXMLController implements Initializable {
     
@@ -118,7 +116,7 @@ public class HmiFXMLController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        taEdit.setWrapText(true);
+        taEdit.requestFocus();
         taEdit.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> ov, String t, String t1) {
@@ -141,6 +139,7 @@ public class HmiFXMLController implements Initializable {
         fontSlider.setValue(fontSize);
         fontSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
         taEdit.setStyle("-fx-font-size: " + newValue.intValue() + "px");
+        fontSize = newValue.intValue();
         });
         
         ContextMenu cm = new ContextMenu();
@@ -158,7 +157,7 @@ public class HmiFXMLController implements Initializable {
         endSelect.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
-                taEdit.requestFocus(); 
+                taEdit.requestFocus();
                 taEdit.selectRange(caretPossitionA, taEdit.getCaretPosition());
             }
             
@@ -242,11 +241,13 @@ public class HmiFXMLController implements Initializable {
             @Override
             public void handle(KeyEvent t) {
                 if (t.isControlDown() && t.getCode() == KeyCode.COMMA) {
-                    fontSize++;
+                    if (fontSize < 36)
+                        fontSize++;
                     fontSlider.setValue(fontSize);
                 }
                 if (t.isControlDown() && t.getCode() == KeyCode.PERIOD) {
-                    fontSize--;
+                    if (fontSize > 10)
+                        fontSize--;
                     fontSlider.setValue(fontSize);
                 }
             }
