@@ -110,6 +110,12 @@ public class HmiFXMLController implements Initializable {
     private MenuItem paste;
     @FXML
     private MenuItem toPDF;
+    @FXML
+    private RadioMenuItem lightThemeButton;
+    @FXML
+    private ToggleGroup themeToggleGroup;
+    @FXML
+    private RadioMenuItem darkThemeButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -310,8 +316,7 @@ public class HmiFXMLController implements Initializable {
                 } catch (Exception e) {
                     System.out.println("The User didnt selected any file : " + e.toString());
                 }
-            }
-            saveTextToFile(selectedFile);
+            } else saveTextToFile(selectedFile);
         }
     }
 
@@ -397,7 +402,7 @@ public class HmiFXMLController implements Initializable {
             rusure.close();
             selectedFile = null;
         }
-        if (selectedFile == null && msg.equals("exit")) stage.close();
+        if (msg.equals("exit")) stage.close(); //selectedFile == null && msg.equals("exit")
     }
 
     @FXML
