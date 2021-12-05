@@ -49,7 +49,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -285,6 +284,7 @@ public class HmiFXMLController implements Initializable {
                 
                 isModified = false;
         }
+            //HMI.stage.setTitle(selectedFile.getName() + " Notepad --");
             detailFileName.setText(selectedFile.getName());
             detailLastSaved.setText(convertTime(selectedFile.lastModified()));
             detailWords.setText(String.valueOf(wcount));
@@ -292,16 +292,22 @@ public class HmiFXMLController implements Initializable {
         } catch(Exception e) {
             System.out.println("The User didnt selected any file : " + e.toString());
         }
+        
+        taEdit.requestFocus();
     }
     
     @FXML
     private void newFile(ActionEvent event) {
         if (isModified) closeOperation("");
+        taEdit.clear();
         isNew = true;
         isModified = false;
-        if (!detailFileName.getText().equals("New File"))
-            selectedFile = new File(System.getProperty("user.home") + System.lineSeparator() + "New File");
-        detailFileName.setText(selectedFile.getName());
+        if (!detailFileName.getText().equals("New File")) {
+            detailFileName.setText("New File");
+            detailLastSaved.setText("Last Saved");
+        }
+        else if (detailLastSaved.getText().equals("Last Saved"))
+            System.out.println("Already new file"); //selectedFile = new File(System.getProperty("user.home") + System.lineSeparator() + "New File");
     }
 
     @FXML
@@ -313,6 +319,7 @@ public class HmiFXMLController implements Initializable {
                 try {
                     File newFile = fc.showSaveDialog(stage);
                     saveTextToFile(newFile);
+                    selectedFile = newFile;
                 } catch (Exception e) {
                     System.out.println("The User didnt selected any file : " + e.toString());
                 }
