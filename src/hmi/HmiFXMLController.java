@@ -259,7 +259,6 @@ public class HmiFXMLController implements Initializable {
                     fontSlider.setValue(fontSize);
                 }
             }
-            
         });
     }
     
@@ -284,7 +283,7 @@ public class HmiFXMLController implements Initializable {
                 
                 isModified = false;
         }
-            //HMI.stage.setTitle(selectedFile.getName() + " Notepad --");
+            HMI.stage.setTitle(selectedFile.getName() + " Notepad --");
             detailFileName.setText(selectedFile.getName());
             detailLastSaved.setText(convertTime(selectedFile.lastModified()));
             detailWords.setText(String.valueOf(wcount));
@@ -292,7 +291,6 @@ public class HmiFXMLController implements Initializable {
         } catch(Exception e) {
             System.out.println("The User didnt selected any file : " + e.toString());
         }
-        
         taEdit.requestFocus();
     }
     
@@ -324,6 +322,7 @@ public class HmiFXMLController implements Initializable {
                     System.out.println("The User didnt selected any file : " + e.toString());
                 }
             } else saveTextToFile(selectedFile);
+            HMI.stage.setTitle(selectedFile.getName() + " Notepad--");
         }
     }
 
@@ -511,12 +510,14 @@ public class HmiFXMLController implements Initializable {
 
     @FXML
     private void undoEdit(ActionEvent event) {
-        taEdit.undo();
+        if (taEdit.isUndoable())
+            taEdit.undo();
     }
 
     @FXML
     private void redoEdit(ActionEvent event) {
-        taEdit.redo();
+        if (taEdit.isRedoable())
+            taEdit.redo();
     }
 
     @FXML
